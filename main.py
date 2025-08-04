@@ -31,7 +31,7 @@ def find_closest_terrain_char(rgb_tuple, color_map, tolerance=40):
             min_dist = dist
             closest_char = terrain_char
             
-    # Retorna o caractere apenas se a distância estiver dentro da tolerância
+    # Retorna o caractere apenas se a distância estiver dentro da tolerância 
     return closest_char if min_dist <= tolerance else '?'
 
 def get_dominant_terrain_from_tile(pixels, center_x, center_y, color_map, tolerance, sample_size=5):
