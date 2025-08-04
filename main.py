@@ -64,7 +64,7 @@ def extract_map(image_path, grid_size, color_map, filename, tolerance=40):
         img = Image.open(image_path).convert('RGB')
         pixels = img.load()
     except FileNotFoundError:
-        print(f"Aviso: Ficheiro de imagem não encontrado em '{image_path}'. A extração foi ignorada.")
+        print(f"Aviso: Arquivo de imagem não encontrado em '{image_path}'. A extração foi ignorada.")
         return False
         
     width, height = img.size
@@ -144,7 +144,7 @@ class MapViewer(tk.Tk):
         Button(control_frame, text="(Re)Gerar Mapas", command=run_full_extraction, bg="#FFDDDD").pack(side="right", padx=10)
 
     def load_map_from_file(self, filename):
-        """Lê um ficheiro .txt da pasta de saída e o carrega para ser desenhado."""
+        """Lê um arquivo .txt da pasta de saída e o carrega para ser desenhado."""
         filepath = os.path.join(self.output_folder, filename) # Monta o caminho completo
         try:
             with open(filepath, 'r') as f:
@@ -153,7 +153,7 @@ class MapViewer(tk.Tk):
             self.canvas.bind("<Configure>", lambda event: self.draw_map())
             self.draw_map()
         except FileNotFoundError:
-            messagebox.showerror("Erro", f"Ficheiro '{filepath}' não encontrado!\n\nClique em '(Re)Gerar Mapas' para o criar.")
+            messagebox.showerror("Erro", f"Arquivo '{filepath}' não encontrado!\n\nClique em '(Re)Gerar Mapas' para o criar.")
             
     def draw_map(self, event=None):
         self.canvas.delete("all")
