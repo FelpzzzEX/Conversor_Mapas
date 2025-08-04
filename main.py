@@ -5,10 +5,6 @@ from tkinter import Frame, Canvas, Button, Label, messagebox
 from PIL import Image
 from collections import Counter
 
-# ==============================================================================
-# PARTE 1: LÓGICA DE EXTRAÇÃO DE MAPA (MÉTODO DE VOTAÇÃO DE TERRENO)
-# ==============================================================================
-
 # Dicionários de mapeamento de cores RGB para caracteres de terreno.
 TERRAIN_COLORS = {
     (34, 177, 76): 'G',   # Grama (Verde escuro)
@@ -82,7 +78,7 @@ def extract_map(image_path, grid_size, color_map, filename, tolerance=40):
                 center_x = int(col * tile_w + tile_w / 2)
                 center_y = int(row * tile_h + tile_h / 2)
                 
-                # MÉTODO ATUALIZADO: Obtém o terreno dominante através de votação
+                # Obtém o terreno dominante através de votação
                 terrain = get_dominant_terrain_from_tile(pixels, center_x, center_y, color_map, tolerance)
                 line.append(terrain)
             f.write("".join(line) + '\n')
@@ -91,9 +87,9 @@ def extract_map(image_path, grid_size, color_map, filename, tolerance=40):
 
 def run_full_extraction():
     """Função para extrair todos os mapas de uma vez."""
-    print("--- A iniciar a extração de todos os mapas ---")
-    INPUT_FOLDER = 'mapas_brutos'
-    OUTPUT_FOLDER = 'mapas_processados' # <-- NOVO: Define a pasta de saída
+    print("--- Iniciando a extração de todos os mapas ---")
+    INPUT_FOLDER = 'mapas_brutos' # Define a pasta de entrada
+    OUTPUT_FOLDER = 'mapas_processados' # Define a pasta de saída
     
     # Verifica se a pasta de entrada existe
     if not os.path.isdir(INPUT_FOLDER):
@@ -105,7 +101,7 @@ def run_full_extraction():
         os.makedirs(OUTPUT_FOLDER)
         print(f"Pasta '{OUTPUT_FOLDER}' criada.")
 
-    # Lista de mapas para processar
+    # Lista de mapas para processar (ajustar conforme a necessidade)
     maps_to_process = [
         {'img': 'mapa_hyrule.png', 'grid': (42, 42), 'colors': TERRAIN_COLORS, 'txt': 'hyrule.txt', 'tol': 75},
         {'img': 'masmorra_1.png', 'grid': (28, 28), 'colors': DUNGEON_COLORS, 'txt': 'masmorra1.txt', 'tol': 50},
@@ -115,16 +111,11 @@ def run_full_extraction():
 
     for map_info in maps_to_process:
         img_path = os.path.join(INPUT_FOLDER, map_info['img'])
-        txt_path = os.path.join(OUTPUT_FOLDER, map_info['txt']) # <-- NOVO: Usa a pasta de saída
+        txt_path = os.path.join(OUTPUT_FOLDER, map_info['txt']) # Usa a pasta de saída
         extract_map(img_path, map_info['grid'], map_info['colors'], txt_path, tolerance=map_info['tol'])
 
     print("--- Extração concluída ---")
-    messagebox.showinfo("Extração Concluída", f"Os ficheiros de mapa (.txt) foram gerados com sucesso na pasta '{OUTPUT_FOLDER}'!")
-
-
-# ==============================================================================
-# PARTE 2: LÓGICA DE VISUALIZAÇÃO GRÁFICA
-# ==============================================================================
+    messagebox.showinfo("Extração Concluída", f"Confira a geração nos botôes na parte superior. Mapas disponíveis em: '{OUTPUT_FOLDER}'!")
 
 TILE_VISUAL_COLORS = {
     'G': 'darkgreen', 'g': 'limegreen', 'A': 'royalblue', 'M': '#A0522D',
@@ -137,7 +128,7 @@ class MapViewer(tk.Tk):
         self.title("Visualizador de Mapas")
         self.geometry("800x650")
         self.map_data = []
-        self.output_folder = 'mapas_processados' # <-- NOVO: Informa a classe sobre a pasta
+        self.output_folder = 'mapas_processados' # Informa a classe sobre a pasta
 
         control_frame = Frame(self, pady=10)
         control_frame.pack(side="top", fill="x")
@@ -145,7 +136,6 @@ class MapViewer(tk.Tk):
         self.canvas = Canvas(self, bg="black")
         self.canvas.pack(side="top", fill="both", expand=True, padx=10, pady=10)
 
-        # ATUALIZADO: Os botões agora procuram os mapas na pasta correta
         Button(control_frame, text="Ver Hyrule", command=lambda: self.load_map_from_file('hyrule.txt')).pack(side="left", padx=5)
         Button(control_frame, text="Ver Masmorra 1", command=lambda: self.load_map_from_file('masmorra1.txt')).pack(side="left", padx=5)
         Button(control_frame, text="Ver Masmorra 2", command=lambda: self.load_map_from_file('masmorra2.txt')).pack(side="left", padx=5)
@@ -155,7 +145,7 @@ class MapViewer(tk.Tk):
 
     def load_map_from_file(self, filename):
         """Lê um ficheiro .txt da pasta de saída e o carrega para ser desenhado."""
-        filepath = os.path.join(self.output_folder, filename) # <-- NOVO: Monta o caminho completo
+        filepath = os.path.join(self.output_folder, filename) # Monta o caminho completo
         try:
             with open(filepath, 'r') as f:
                 self.map_data = [line.strip() for line in f.readlines()]
@@ -180,15 +170,12 @@ class MapViewer(tk.Tk):
                 color = TILE_VISUAL_COLORS.get(tile_char, 'magenta')
                 self.canvas.create_rectangle(x0, y0, x1, y1, fill=color, outline="")
 
-# ==============================================================================
-# PONTO DE ENTRADA PRINCIPAL DA APLICAÇÃO
-# ==============================================================================
 if __name__ == "__main__":
     app = MapViewer()
     messagebox.showinfo(
         "Bem-vindo!",
         "1. Certifique-se de que a pasta 'mapas_teste' está no mesmo diretório que este script.\n\n"
-        "2. Clique em '(Re)Gerar Mapas' para criar os ficheiros na pasta 'mapas_processados'.\n\n"
+        "2. Clique em '(Re)Gerar Mapas' para criar ou atualizar os mapas na pasta 'mapas_processados'.\n\n"
         "3. Use os outros botões para visualizar cada mapa."
     )
     app.mainloop()
