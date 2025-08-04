@@ -40,13 +40,17 @@ Uma interface gráfica foi desenvolvida com `Tkinter` para permitir a visualiza�
    Coloque os arquivos `.png` desejados na pasta `mapas_brutos/`.
 
 3. **Executar o Programa:**
-   Execute o arquivo principal:
 
+   A execução pode ser feita pela IDE escolhida (Visual Studio Code, por exemplo) ou através do terminal, com:  
    ```bash
    python main.py
    ```
+   ou
+   ```bash
+   python3 main.py # Linux
+   ```
 
-4. **Interface Gráfica**
+5. **Interface Gráfica**
 
    * Clique em **"(Re)Gerar Mapas"** para processar ou atualizar os arquivos.
    * Use os botões como **"Ver Hyrule"**, **"Ver Masmorra 1"**, etc., para visualizar os mapas.
